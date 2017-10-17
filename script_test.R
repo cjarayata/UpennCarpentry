@@ -106,11 +106,8 @@ ggplot(gapminder, aes(x = year, y = lifeExp)) +
   theme_tufte() +
   theme(legend.position = "none")
 
-<<<<<<< HEAD
 plot <- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
-=======
-ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
->>>>>>> 8397a7e3e655c4d6564533aa8bc25e704b9ca419
+
   geom_point(alpha = 0.5, aes(colour = country, size = pop)) + # aesthetics needed here!
   scale_x_log10() + # this is helpful to know!
   # geom_line(aes(by = country, color = country)) +
@@ -119,7 +116,7 @@ ggplot(gapminder, aes(x = gdpPercap, y = lifeExp)) +
   # facet_wrap(~continent) +
   theme_tufte() +
   theme(legend.position = "none") +
-<<<<<<< HEAD
+
   geom_smooth(method = "loess", size = 1.5) +
   labs(title = "Here is a graph")
 
@@ -160,9 +157,8 @@ while (x < 10) {
 }
 
 # ask about how to tell if code is efficient
-=======
+
   geom_smooth(method = "loess", size = 1.5)
->>>>>>> 8397a7e3e655c4d6564533aa8bc25e704b9ca419
 
 
 # there was some sort of weird conflict but i am going to start day 2
