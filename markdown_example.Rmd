@@ -1,0 +1,37 @@
+---
+title: "Demo Markdown"
+author: "CJ Arayata"
+date: "October 17, 2017"
+output: html_document
+---
+
+# Set Up Session
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/Desktop/UpennCarpentry/UpennCarpentry")
+gapminder <- read.csv("data/gapminder.csv")
+pacman::p_load(ggplot2, dplyr)
+```
+
+## R Markdown
+
+Look I can doooo thingssss. This looks a bit nicer than the default.
+
+```{r}
+knitr::kable(summary(gapminder))
+```
+
+## Including Plots
+
+**Look** _mom_ I am going to `ggplot` a thing.
+
+```{r}
+gapminder %>%
+  # Filter countries that start with "A" or "Z"
+  filter(substr(country, start = 1, stop = 1) %in% c("A", "Z")) %>%
+  # Make the plot
+  ggplot(aes(x = year, y = lifeExp, color = continent)) +
+  geom_line() +
+  facet_wrap( ~ country)
+```
+
