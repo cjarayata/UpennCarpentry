@@ -163,3 +163,152 @@ while (x < 10) {
 
 # there was some sort of weird conflict but i am going to start day 2
 # i cant tell what all these hatches and stuff are
+
+  
+# day 2 starts - list structures
+  
+genes <- list()
+genes[["HOX"]] <- c("exon1", "exon2", "exon3")
+genes[["HBB"]] <- c("exon1")
+genes
+
+# functions stuff
+gapminder <- read.csv("data/gapminder.csv", stringsAsFactors = F)
+
+year <- c(1952, 1957)
+
+# but coulnd't i just do this?
+gapminder$gdp <- gapminder$pop * gapminder$gdpPercap
+
+# write to new global dataframe
+new_gapminder <- calcGDP(gapminder)
+
+paste0("Man I love the years ", year[1], " and ", year[2])
+
+compliment <- function(name) {
+  if (!is.character(name)) {
+    stop("The input must be a character string.")
+  }
+  words <- paste0("Hello ", name, ", I like your face.")
+  print(words)
+}
+
+compliment("Bob")
+
+pdf("plots/Life_Exp_vs_time.pdf", width=12, height=4)
+ggplot(data=gapminder, aes(x=year, y=lifeExp, colour=country)) +
+  geom_line() +
+  facet_grid(. ~continent) +
+  theme(legend.position = "none")
+
+# You then have to make sure to turn off the pdf device!
+
+dev.off()
+
+write.table(
+  gapminder[gapminder$year > 1990, ],
+  file = "data/cleaned_data/gapminder-after1990.txt",
+  sep = "¯_(ツ)_¯", quote = F, row.names = F)
+
+devtools::install_github("dill/emoGG")
+library(emoGG)
+emoji_search("poop")
+ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_emoji(emoji="1f4a9")
+
+# info about performance/benchmarking
+# http://adv-r.had.co.nz/Performance.html
+
+
+# select, filter, mutate, group_by, summarize
+# hadley is god-like
+library(plyr)
+unloadNamespace("plyr")
+library(dplyr)
+
+# a pipe looks like this: %>%
+
+ddply(
+  .data = calcGDP(gapminder),
+  .variables = "continent",
+  .fun = function(x) mean(x$gdp)
+)
+
+# select
+year_country_gdp <- select(gapminder, year, country, gdpPercap)
+class(year_country_gdp)
+
+
+year_country_gdp <- gapminder %>% select(year,country,gdpPercap)
+install.packages("tidyr")
+library(tidyr)
+
+gapminder %>% select(., year,country,gdpPercap)
+
+# filter
+"1952" <- gapminder %>% filter(year == 1952)
+
+year_country_lifeExp_Africa <- gapminder %>%
+  filter(continent=="Africa") %>%
+  select(year,country,lifeExp)
+
+# order of piping matters; if you filter by a variable, it must be *before* it is selected/subsetted!
+
+head(gapminder %>% group_by(country))
+str(gapminder)
+
+# summarize!!
+gap <- gapminder %>% group_by(country) %>%
+  summarize(mean_gdpPercap = mean(gdpPercap))
+str(gap)
+
+
+# Calculate the average life expectancy per country. Which has the longest average life expectancy and which has the shortest average life expectancy?
+lifeExp_bycountry <- gapminder %>%
+  group_by(country) %>%
+  summarize(mean_lifeExp=mean(lifeExp))
+lifeExp_bycountry %>%
+  filter(mean_lifeExp == min(mean_lifeExp) | mean_lifeExp == max(mean_lifeExp))
+
+# counting
+gapminder %>%
+  filter(year == 2002) %>%
+  count(continent)
+
+# what i used to do in creating summary tables
+gapminder %>%
+  group_by(continent) %>%
+  summarize(
+    mean_le = mean(lifeExp),
+    min_le = min(lifeExp),
+    max_le = max(lifeExp),
+    se_le = sd(lifeExp)/sqrt(n()))
+
+# mutate: creates a new column
+gap <- gapminder %>% mutate(new_col = pop / 100)
+
+# combining with ggplot
+library(ggplot2)
+
+# Get the start letter of each country
+
+# the "bad" way...
+starts.with <- substr(gapminder$country, start = 1, stop = 1)
+# Filter countries that start with "A" or "Z"
+az.countries <- gapminder[starts.with %in% c("A", "Z"), ]
+# Make the plot
+ggplot(data = az.countries, aes(x = year, y = lifeExp, color = continent)) +
+  geom_line() + facet_wrap( ~ country)
+
+# the clean way
+gapminder %>%
+  # Filter countries that start with "A" or "Z"
+  filter(substr(country, start = 1, stop = 1) %in% c("A", "Z")) %>%
+  # Make the plot
+  ggplot(aes(x = year, y = lifeExp, color = continent)) +
+  geom_line() +
+  facet_wrap( ~ country)
+
+# tidyr
+gap_wide <- read.csv("data/gapminder_wide.csv", stringsAsFactors = FALSE)
+
