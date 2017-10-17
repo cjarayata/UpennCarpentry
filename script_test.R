@@ -163,3 +163,7 @@ while (x < 10) {
 =======
   geom_smooth(method = "loess", size = 1.5)
 >>>>>>> 8397a7e3e655c4d6564533aa8bc25e704b9ca419
+
+
+# there was some sort of weird conflict but i am going to start day 2
+# i cant tell what all these hatches and stuff are
